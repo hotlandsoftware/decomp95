@@ -1,0 +1,31 @@
+#include <windows.h>
+#include <ver.h>
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     1,0,0,501
+PRODUCTVERSION  1,0,0,501
+FILEFLAGSMASK   0x3fL
+FILEFLAGS       0xaL
+FILEOS          VOS_DOS_WINDOWS16
+FILETYPE        VFT_APP
+FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",      "Microsoft Corporation\0"
+            VALUE "FileDescription",  "Windows Telephony DLL hidden app\0"
+            VALUE "FileVersion",      "1.0.501\0"
+            VALUE "InternalName",     "tapi applet\0"
+            VALUE "LegalCopyright",   "(c) 1995 Microsoft Corporation.  Portions Copyright Intel/Microsoft 1992-93.  All Rights Reserved.\0"
+            VALUE "OriginalFilename", "TAPI.EXE\0"
+            VALUE "ProductName",      "Windows Telephony\0"
+            VALUE "ProductVersion",   "1.0.501\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
