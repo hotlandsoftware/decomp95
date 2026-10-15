@@ -6,4 +6,4 @@ SRC=$(realpath "$1"); OUT=$2; shift 2
 mkdir -p "$OUT"; cd "$OUT" || exit 1
 . "$ROOT/tools/wineenv.sh"
 B=$(basename "$SRC" .c)
-wine "$ROOT/msvc/BIN/CL.EXE" /nologo /c "$@" /Fc$B.COD /Fo$B.OBJ "$(winpath "$SRC")" 2>&1 | tr -d '\r' | grep -iv "^z:" || true
+wine "$ROOT/msvc/BIN/CL.EXE" /nologo /c "$@" /Fc$B.COD /Fo$B.OBJ "$(winpath "$SRC")" </dev/null 2>&1 | tr -d '\r' | grep -iv "^z:" || true

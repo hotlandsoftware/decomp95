@@ -1,0 +1,11 @@
+NAME            WINVER
+DESCRIPTION     'Windows Version program'
+EXETYPE         WINDOWS
+STUB            'WINSTUB.EXE'
+CODE            PRELOAD MOVEABLE
+DATA            PRELOAD MOVEABLE MULTIPLE
+HEAPSIZE        256
+STACKSIZE       4096
+
+EXPORTS
+    AppDlgProc  @2

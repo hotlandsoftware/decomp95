@@ -10,18 +10,24 @@ Toolchains are not committed; place them as follows:
 - Host packages: `wine`, `dosbox`, `uasm`, `python3`
 
 # Building
-`tools/build.sh` builds `build/tapiexe/TAPIEXE.EXE` from a clean state and compares it with `original/tapiexe.exe`.
+`tools/build.sh [module...]` builds each module (default: all) into `build/<module>/` from a clean state and
+compares it with `original/`. Each module has a `src/<module>/build.sh` using the helpers in `tools/buildlib.sh`.
+Artwork (icons etc.) is extracted from `original/` at build time and is never committed.
 
 # Layout
-- `original/` – original binaries (not committed)
-- `src/<module>/` – decompiled sources
-- `tools/build.sh` – builds into `build/` and compares against `original/`
+- `original/` – original Windows 95 files, laid out like the Windows directory (not committed)
+- `src/crt/` – shared startup code (`crt0w.asm`, medium-model no-CRT Windows startup)
+- `src/<module>/` – decompiled sources, `.def`, `.rc` and `build.sh` per module
+- `tools/build.sh`, `tools/buildlib.sh` – build driver and helpers
 - `tools/cc.sh` – compile one C file with MSVC 1.52 (writes a `.COD` listing)
 - `tools/dosrun.sh` – run DOS commands in headless DOSBox; `tools/wineenv.sh` – headless Wine environment
 - `tools/codcmp.py` – compare a `.COD` listing instruction-by-instruction with the original
-- `tools/necmp.py` – NE executable comparison; `tools/omfdump.py` – OMF object dump; `tools/symdump.py` – MAPSYM .SYM dump
+- `tools/necmp.py` – NE executable comparison; `tools/neinfo.py` – NE header/segment/relocation dump
+- `tools/neres.py` – NE resource listing/dump; `tools/extract_ico.py` – rebuild an .ico from an NE icon group
+- `tools/omfdump.py` – OMF object dump; `tools/symdump.py` – MAPSYM .SYM dump
 
 # Status
 | Module | Description | Status |
 |---|---|---|
-| tapiexe.exe | Windows Telephony DLL hidden app | **Byte-identical** (1784 bytes, MD5 c2b65024347742655abe184ce8ac9094) |
+| SYSTEM/tapiexe.exe | Windows Telephony DLL hidden app | **Byte-identical** (1784 bytes) |
+| winver.exe | Windows Version program | **Byte-identical** (3632 bytes) |

@@ -16,7 +16,7 @@ rm -f "$ROOT/$DIR/DOSRUN.LOG"
 DOSDIR=$(printf '%s' "$DIR" | tr '/' '\\')
 env -u DISPLAY -u WAYLAND_DISPLAY SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy \
     timeout 120 dosbox -conf "$CONF" -c "mount c \"$ROOT\"" -c "c:" -c "cd \\$DOSDIR" \
-    -c "call DOSRUN.BAT" -c "exit" >/dev/null 2>&1
+    -c "call DOSRUN.BAT" -c "exit" </dev/null >/dev/null 2>&1
 rc=$?
 rm -f "$BAT"
 [ -f "$ROOT/$DIR/DOSRUN.LOG" ] && tr -d '\r' < "$ROOT/$DIR/DOSRUN.LOG"

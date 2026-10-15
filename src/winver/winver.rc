@@ -1,0 +1,49 @@
+#include <windows.h>
+#include <ver.h>
+
+WinVer ICON winver.ico
+
+100 DIALOG 22, 17, 200, 80
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Windows"
+FONT 8, "Helv"
+BEGIN
+    CONTROL "", 100, "static", SS_CENTER | WS_CHILD, 0, 5, 200, 10
+    CONTROL "Copyright © 1981-1995, Microsoft Corp.", -1, "static", SS_CENTER | WS_CHILD, 0, 47, 200, 10
+    CONTROL "WinVer", -1, "static", SS_ICON | WS_CHILD, 92, 21, 32, 32
+    CONTROL "OK", IDOK, "button", BS_DEFPUSHBUTTON | WS_TABSTOP | WS_GROUP | WS_CHILD, 84, 59, 32, 16
+END
+
+STRINGTABLE
+BEGIN
+    310, "Windows 95"
+END
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     4,0,0,950
+PRODUCTVERSION  4,0,0,950
+FILEFLAGSMASK   0x3fL
+FILEFLAGS       0x0L
+FILEOS          VOS_DOS_WINDOWS16
+FILETYPE        VFT_APP
+FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",      "Microsoft Corporation\0"
+            VALUE "FileDescription",  "Windows-version utility\0"
+            VALUE "FileVersion",      "4.00.950\0"
+            VALUE "InternalName",     "WINVER\0"
+            VALUE "LegalCopyright",   "Copyright © Microsoft Corp. 1991-1995\0"
+            VALUE "OriginalFilename", "WINVER.\0"
+            VALUE "ProductName",      "Microsoft® Windows® Operating System\0"
+            VALUE "ProductVersion",   "4.00.950\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END

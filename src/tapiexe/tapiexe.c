@@ -27,7 +27,7 @@ DWORD FAR PASCAL RegisterServiceProcess(DWORD dwProcessId, DWORD dwType);
 extern char __based(__segname("_CODE")) szClassName[];
 
 /* Own code-class segment; packed into the code segment after the startup code. */
-/* Defined in start.asm (paragraph-aligned code-class segment after crt0). */
+/* Defined in telestr.asm (paragraph-aligned code-class segment after crt0). */
 extern char __far szTelephony[];
 
 HINSTANCE ghInst;
