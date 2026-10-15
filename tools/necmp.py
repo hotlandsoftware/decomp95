@@ -35,4 +35,25 @@ for i, (x, y) in enumerate(zip(sa, sb)):
     same = sum(1 for p, q in zip(da, db) if p == q)
     print('    %d/%d bytes equal (%.1f%%)' % (same, len(da), 100.0*same/max(1, len(da))))
     diffs(da, db)
+
+def tables(d, ne):
+    h = lambda o: struct.unpack_from('<H', d, ne+o)[0]
+    t = {}
+    t['resource table'] = d[ne+h(0x24):ne+h(0x26)]
+    t['resident names'] = d[ne+h(0x26):ne+h(0x28)]
+    t['module refs']    = [d[ne+h(0x2a)+o+1:ne+h(0x2a)+o+1+d[ne+h(0x2a)+o]] for o in
+                           struct.unpack_from('<%dH' % h(0x1e), d, ne+h(0x28))]
+    t['imported names'] = d[ne+h(0x2a):ne+h(0x04)]
+    t['entry table']    = d[ne+h(0x04):ne+h(0x04)+h(0x06)]
+    nr = struct.unpack_from('<I', d, ne+0x2c)[0]
+    t['nonresident names'] = d[nr:nr+h(0x20)]
+    for i, (fo, ln, fl, mn) in enumerate(segs(d)[1]):
+        if fl & 0x100:
+            n = struct.unpack_from('<H', d, fo+ln)[0]
+            t['seg%d relocs' % (i+1)] = d[fo+ln:fo+ln+2+8*n]
+    return t
+ta, tb = tables(a, nea), tables(b, neb)
+for k in ta:
+    print('[%s] %s' % (k, 'same' if ta[k] == tb.get(k) else 'DIFFERENT'))
+    if ta[k] != tb.get(k) and isinstance(ta[k], list): print('    orig', ta[k], '\n    ours', tb.get(k))
 sys.exit(1)
