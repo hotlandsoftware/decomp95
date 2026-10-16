@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Decompile the resources of a PE image into RC script text (menus, dialogs,
-string tables, accelerators, version info).  Icons/cursors are referenced by
-file name (extract them separately with tools/peicons.py).
+string tables, accelerators, version info).  Icons and bitmaps are referenced
+by file name (extract them with tools/peicons.py and tools/pebitmaps.py).
 Usage: res2rc.py <file.exe> [codepage=1252]"""
 import sys, struct
 d = open(sys.argv[1], 'rb').read()
@@ -79,6 +79,32 @@ for path, b in res:
                 last = depth.pop()
             if last and len(depth) == 1: break
         out.append('END'); out.append('')
+    elif t == 5 and b[:4] == b'\x01\x00\xff\xff':     # DIALOGEX
+        hid, exstyle, style, cdit, x, y, cx, cy = struct.unpack_from('<IIIHhhhh', b, 4)
+        o = 26
+        menu, o = sz_or_ord(b, o); cls, o = sz_or_ord(b, o); cap, o = ustr(b, o)
+        out.append('%s DIALOGEX %d, %d, %d, %d%s' % (idn(n), x, y, cx, cy, (', %d' % hid) if hid else ''))
+        out.append('STYLE 0x%08x' % style)
+        if exstyle: out.append('EXSTYLE 0x%08x' % exstyle)
+        if cap: out.append('CAPTION %s' % q(cap))
+        if menu: out.append('MENU %s' % idn(menu))
+        if cls: out.append('CLASS %s' % (q(cls) if isinstance(cls, str) else cls))
+        if style & 0x40:
+            pt, wt, it, cs = struct.unpack_from('<HHBB', b, o); face, o = ustr(b, o + 6)
+            out.append('FONT %d, %s, %d, %d, 0x%x' % (pt, q(face), wt, it, cs))
+        out.append('BEGIN')
+        CLS = {0x80: 'Button', 0x81: 'Edit', 0x82: 'Static', 0x83: 'ListBox', 0x84: 'ScrollBar', 0x85: 'ComboBox'}
+        for i in range(cdit):
+            o = (o + 3) & ~3
+            ihid, ex, st, x, y, cx, cy, cid = struct.unpack_from('<IIIhhhhI', b, o); o += 24
+            c, o = sz_or_ord(b, o); text, o = sz_or_ord(b, o)
+            extra = struct.unpack_from('<H', b, o)[0]; o += 2 + extra
+            cname = CLS.get(c, c) if isinstance(c, int) else c
+            tx = q(text) if isinstance(text, str) else str(text)
+            cid_s = '-1' if cid in (0xffff, 0xffffffff) else str(cid)
+            out.append('    CONTROL %s, %s, %s, 0x%08x, %d, %d, %d, %d%s%s' % (tx, cid_s, q(cname) if isinstance(cname, str) else cname,
+                       st, x, y, cx, cy, (', 0x%08x' % ex) if ex or ihid else '', (', %d' % ihid) if ihid else ''))
+        out.append('END'); out.append('')
     elif t == 5:                                    # DIALOG
         style, exstyle, cdit, x, y, cx, cy = struct.unpack_from('<IIHhhhh', b, 0)
         o = 18
@@ -127,6 +153,8 @@ for path, b in res:
             out.append('    %d, %d, %s' % (key, cmd, ', '.join(opts)))
             if fl & 0x80: break
         out.append('END'); out.append('')
+    elif t == 2:                                    # BITMAP
+        out.append('%s BITMAP bitmap%s.bmp' % (idn(n), idn(n))); out.append('')
     elif t == 14:                                   # GROUP_ICON
         out.append('%s ICON icon%s.ico' % (idn(n), idn(n))); out.append('')
     elif t == 16:                                   # VERSIONINFO

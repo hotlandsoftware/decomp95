@@ -60,6 +60,8 @@ Post-link steps that the original build also performed (timestamps, `BIND`, PE c
 - `tools/peicons.py`: rebuilds .ico files from PE icon groups
 - `tools/libdump.py`: COFF archive (.lib) member dump
 - `tools/patchhints.py`: copies an SDK import library with its hints patched to match the original
+- `tools/ordimplib.py`: builds an import library for functions imported by ordinal only
+- `tools/pebitmaps.py`: writes a PE image's BITMAP resources as .bmp files
 - `tools/pestamp.py`: sets the link/resource timestamps
 - `tools/pechecksum.py`: sets the PE checksum
 - `tools/ghidra/`: headless Ghidra decompile script
@@ -72,6 +74,7 @@ Post-link steps that the original build also performed (timestamps, `BIND`, PE c
 | msmixmgr.dll | Audio Mixer Manager (forwards to MMSYSTEM) | NE (16-bit) | 100% | 100% |
 | rsrc16.dll | Resource Meter 16-bit thunks | NE (16-bit) | 100% | 100% |
 | notepad.exe | Notepad | PE (32-bit) | 100% | 65% |
+| welcome.exe | Welcome screen | PE (32-bit) | 100% | 53% |
 
 *Decompiled*: share of the module's code that has C/assembly source and builds into a runnable binary.
 *Matching*: share of code bytes in functions that compile byte-identically to the original (100% means the
@@ -81,3 +84,7 @@ notepad.exe has 48 of its 57 functions matching. It builds to the same size and 
 identical, and import descriptors, hints and bound values are too. The remaining differences are in `.text`
 (9 functions not yet matching), the import order and relocations that follow from it, and the header fields that depend on them.
 See `src/notepad/README.md` for details.
+
+welcome.exe has 9 of its 12 functions matching; the other three differ by 75 bytes in total (register and
+stack-slot assignment). Everything outside `.text` is identical except the import thunk order and the checksum.
+See `src/welcome/README.md`.

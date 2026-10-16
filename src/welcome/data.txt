@@ -1,0 +1,4 @@
+# Data addresses in original SYSTEM/welcome.exe -> our names
+402000 g_hbrInfo
+402004 g_fShowTips
+402098 g_hinst

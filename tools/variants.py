@@ -14,10 +14,13 @@ Environment:
   JOBS=n     parallel compiles (default 8)
   LOCS=a-b   also try NPLOCn (n unused locals, see nppad.h) at the top of the
              function body for each n in a..b (replacing any NPLOC already there)
-  BEST=n     print only the n best results (sorted by FDIFF lines, then bytes)"""
+  BEST=n     print only the n best results (sorted by FDIFF lines, then bytes)
+  CL_FLAGS=  compiler flags (default '/Ogsy /Gz'; also used by padscan/locopt)
+  EXE=path   original image (default original/SYSTEM/notepad.exe)
+  SYMS=path  symbols.txt for it (default: symbols.txt next to the source)"""
 import sys, os, re, subprocess, tempfile
 from concurrent.futures import ThreadPoolExecutor
-src, func, varf = sys.argv[1:4]; flags = sys.argv[4:] or ['/Ogsy', '/Gz']
+src, func, varf = sys.argv[1:4]; flags = sys.argv[4:] or os.environ.get('CL_FLAGS', '/Ogsy /Gz').split()
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 text = open(src).read()
 m = re.search(r'^\S[^\n]*\b%s\s*\(' % re.escape(func), text, re.M)
@@ -25,6 +28,8 @@ start = m.start(); end = text.index('\n}\n', start) + 3
 ns = {}; exec(open(varf).read(), ns)
 out = tempfile.mkdtemp(prefix='var', dir=os.environ.get('TMPDIR'))
 inc = 'Z:' + os.path.dirname(os.path.abspath(src)).replace('/', '\\')
+exe = os.environ.get('EXE', root + '/original/SYSTEM/notepad.exe')
+syms = os.environ.get('SYMS', os.path.join(os.path.dirname(os.path.abspath(src)), 'symbols.txt'))
 
 def padded(s, n):
     if n is None: return s
@@ -54,14 +59,12 @@ def run(job):
     open(f, 'w').write(padded(text[:start] + body.strip('\n') + '\n' + text[end:], pad))
     subprocess.run([root + '/tools/cc32.sh', f, d] + flags + ['/I' + inc], capture_output=True)
     obj = os.path.join(d, os.path.splitext(os.path.basename(src))[0] + '.obj')
-    r = subprocess.run(['python3', root + '/tools/coffcmp.py', obj, root + '/original/SYSTEM/notepad.exe',
-                        root + '/src/notepad/symbols.txt'], capture_output=True, text=True).stdout
+    r = subprocess.run(['python3', root + '/tools/coffcmp.py', obj, exe, syms], capture_output=True, text=True).stdout
     line = [l for l in r.splitlines() if l.startswith(func + ' ')]
     total = r.strip().splitlines()[-1] if r.strip() else '?'
     nd = None
     if os.environ.get('FDIFF') and os.path.exists(obj):
-        dd = subprocess.run(['python3', root + '/tools/fdiff.py', obj, root + '/original/SYSTEM/notepad.exe',
-                             root + '/src/notepad/symbols.txt', func, '-a'], capture_output=True, text=True).stdout
+        dd = subprocess.run(['python3', root + '/tools/fdiff.py', obj, exe, syms, func, '-a'], capture_output=True, text=True).stdout
         nd = sum(1 for l in dd.splitlines() if l.startswith('|'))
     res = (line[0][29:] if line else 'missing').strip()
     mb = re.search(r'(\d+) bytes differ', res)

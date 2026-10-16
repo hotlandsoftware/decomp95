@@ -15,6 +15,8 @@ args = [a for a in sys.argv[1:] if not a.startswith('--')]
 src = args[0]; nmax = int(args[1]) if len(args) > 1 else 31
 depth = int(args[2]) if len(args) > 2 else 1
 inc = 'Z:' + os.path.dirname(os.path.abspath(src)).replace('/', '\\')
+exe = os.environ.get('EXE', root + '/original/SYSTEM/notepad.exe')
+syms = os.environ.get('SYMS', os.path.join(os.path.dirname(os.path.abspath(src)), 'symbols.txt'))
 tmp = tempfile.mkdtemp(prefix='loc', dir=os.environ.get('TMPDIR'))
 cnt = [0]
 
@@ -23,10 +25,9 @@ def compile_cmp(text):
     d = os.path.join(tmp, str(cnt[0]) + '_' + str(os.getpid()) + '_' + str(id(text)))
     os.makedirs(d)
     f = os.path.join(d, os.path.basename(src)); open(f, 'w').write(text)
-    subprocess.run([root + '/tools/cc32.sh', f, d, '/Ogsy', '/Gz', '/W3', '/I' + inc], capture_output=True)
+    subprocess.run([root + '/tools/cc32.sh', f, d] + os.environ.get('CL_FLAGS', '/Ogsy /Gz /W3').split() + ['/I' + inc], capture_output=True)
     obj = os.path.join(d, os.path.splitext(os.path.basename(src))[0] + '.obj')
-    out = subprocess.run(['python3', root + '/tools/coffcmp.py', obj, root + '/original/SYSTEM/notepad.exe',
-                          root + '/src/notepad/symbols.txt'], capture_output=True, text=True).stdout
+    out = subprocess.run(['python3', root + '/tools/coffcmp.py', obj, exe, syms], capture_output=True, text=True).stdout
     subprocess.run(['rm', '-rf', d])
     res = {}
     for l in out.splitlines():

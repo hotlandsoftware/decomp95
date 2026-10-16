@@ -1,0 +1,14 @@
+# Function addresses in original SYSTEM/welcome.exe -> our names
+401159 SwapWindows
+4011cf InitApplication
+4011d7 ShowNextTip
+4012fd RunFromSetupSource
+401557 RemoveButtonIf
+401615 InitWelcomeDialog
+401897 WelcomeCommand
+401bf4 WelcomeDlgProc
+401c9e RunFromCD
+401d18 DoWelcome
+401dbc ModuleEntry
+401e40 WinMain
+401e64 ShellMessageBoxA_stub

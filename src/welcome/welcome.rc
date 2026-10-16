@@ -1,0 +1,67 @@
+/*
+ * welcome.rc - Welcome screen resources
+ */
+
+#include <windows.h>
+
+100 DIALOGEX 0, 0, 321, 197
+STYLE 0x90c808c0
+EXSTYLE 0x00000008
+CAPTION "Welcome"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL "Close", 1, "Button", 0x50010001, 238, 97, 76, 14
+    CONTROL "&Windows Tour", 16897, "Button", 0x50010000, 238, 29, 76, 14
+    CONTROL "What's &New", 16898, "Button", 0x50010000, 238, 47, 76, 14
+    CONTROL "&Online Registration", 16899, "Button", 0x50010000, 238, 65, 76, 14
+    CONTROL "", 16908, "Static", 0x50001000, 10, 29, 220, 157
+    CONTROL "", -1, "Static", 0x50000010, 237, 88, 76, 1
+    CONTROL 16928, 16904, "Static", 0x50000003, 20, 36, 18, 20
+    CONTROL "", 16906, "Static", 0x5000000e, 10, 7, 220, 15
+    CONTROL "Did you know...", 16910, "Static", 0x50020000, 50, 41, 118, 12
+    CONTROL "To open a program, you just click the Start button, and then click the program's icon.", 16905, "Static", 0x50020000, 50, 60, 150, 19
+    CONTROL "", 16909, "Static", 0x5000000e, 69, 88, 110, 88
+END
+
+101 DIALOGEX 0, 0, 324, 156
+STYLE 0x90c808c0
+EXSTYLE 0x00000008
+CAPTION "Welcome"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL "Close", 1, "Button", 0x50010001, 238, 132, 76, 14
+    CONTROL "&Windows Tour", 16897, "Button", 0x50010000, 238, 29, 76, 14
+    CONTROL "What's &New", 16898, "Button", 0x50010000, 238, 47, 76, 14
+    CONTROL "&Online Registration", 16899, "Button", 0x50010000, 238, 65, 76, 14
+    CONTROL "&Product Catalog", 16900, "Button", 0x50010000, 238, 83, 76, 14
+    CONTROL "Next &Tip", 16901, "Button", 0x50010000, 238, 101, 76, 14
+    CONTROL "&Show this Welcome Screen next time you start Windows", 16903, "Button", 0x50010003, 10, 134, 210, 10
+    CONTROL "", 16908, "Static", 0x50001000, 10, 29, 220, 95
+    CONTROL "", -1, "Static", 0x50000010, 237, 123, 76, 1
+    CONTROL 16928, 16904, "Static", 0x50000003, 20, 42, 18, 20
+    CONTROL "", 16906, "Static", 0x5000000e, 10, 7, 220, 15
+    CONTROL "Did you know...", 16910, "Static", 0x50020000, 50, 47, 118, 12
+    CONTROL "To open a program, you just click the Start button, and then click the program's icon.", 16905, "Static", 0x50020000, 50, 66, 150, 40
+END
+
+16912 BITMAP bitmap16912.bmp
+
+16913 BITMAP bitmap16913.bmp
+
+16928 ICON icon16928.ico
+
+STRINGTABLE
+BEGIN
+    4096, "Welcome"
+END
+
+STRINGTABLE
+BEGIN
+    257, "The Windows 95 tour was not installed"
+    258, "The Online registration failed to run"
+    259, "The product catalog could not be run."
+    260, "No CDROM drives were found on the system"
+    261, "Unable to find the Windows 95 CD-ROM.\n\nPlease insert the Windows 95 CD-ROM and click OK. If you do not have the Windows 95 CD-ROM, click Cancel."
+    262, "Help\\Tour.exe"
+    263, "The program %1 failed to run"
+END

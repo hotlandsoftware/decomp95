@@ -11,6 +11,8 @@ a, _, b = (sys.argv[2] if len(sys.argv) > 2 else '0-31').partition('-')
 pads = range(int(a), int(b or a) + 1)
 text = re.sub(r'^#define NPPAD \d+\n', '', open(src).read(), flags=re.M)
 inc = 'Z:' + os.path.dirname(os.path.abspath(src)).replace('/', '\\')
+exe = os.environ.get('EXE', root + '/original/SYSTEM/notepad.exe')
+syms = os.environ.get('SYMS', os.path.join(os.path.dirname(os.path.abspath(src)), 'symbols.txt'))
 tmp = tempfile.mkdtemp(prefix='pad', dir=os.environ.get('TMPDIR'))
 
 def run(n):
@@ -18,10 +20,9 @@ def run(n):
     i = text.index('#include "nppad.h"\n')
     f = os.path.join(d, os.path.basename(src))
     open(f, 'w').write(text[:i] + '#define NPPAD %d\n' % n + text[i:])
-    subprocess.run([root + '/tools/cc32.sh', f, d, '/Ogsy', '/Gz', '/W3', '/I' + inc], capture_output=True)
+    subprocess.run([root + '/tools/cc32.sh', f, d] + os.environ.get('CL_FLAGS', '/Ogsy /Gz /W3').split() + ['/I' + inc], capture_output=True)
     obj = os.path.join(d, os.path.splitext(os.path.basename(src))[0] + '.obj')
-    out = subprocess.run(['python3', root + '/tools/coffcmp.py', obj, root + '/original/SYSTEM/notepad.exe',
-                          root + '/src/notepad/symbols.txt'], capture_output=True, text=True).stdout
+    out = subprocess.run(['python3', root + '/tools/coffcmp.py', obj, exe, syms], capture_output=True, text=True).stdout
     res = []
     for l in out.splitlines():
         if 'functions match' in l: continue
