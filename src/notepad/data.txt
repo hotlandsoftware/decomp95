@@ -1,4 +1,4 @@
-# Data addresses in original SYSTEM/notepad.exe -> our names (for tools/dis.py annotation).
+# Data addresses in original SYSTEM/notepad.exe -> our names (for tools/pedis.py annotation).
 406000 hwndNP
 406004 hwndEdit
 406008 hDlgFind

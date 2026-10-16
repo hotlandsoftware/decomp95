@@ -7,7 +7,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#define NPPAD 11
+#define NPPAD 16
 #include "nppad.h"
 
 extern "C" {
@@ -83,11 +83,12 @@ LPSTR WINAPI StrChrA(LPCSTR lpStart, WORD wMatchIn)
 LPSTR WINAPI StrRChrA(LPCSTR lpStart, LPCSTR lpEnd, WORD wMatchIn)
 {
     LPCSTR lpFound = NULL;
+    LPCSTR lpLast;
 
-    if (!lpEnd)
-        lpEnd = lpStart + lstrlenA(lpStart);
+    if (!(lpLast = lpEnd))
+        lpLast = lpStart + lstrlenA(lpStart);
     wMatch = wMatchIn;
-    for (; lpStart < lpEnd; lpStart = CharNextA(lpStart)) {
+    for (; lpStart < lpLast; lpStart = CharNextA(lpStart)) {
         if (!ChrCmpA(*(WORD *)lpStart))
             lpFound = lpStart;
     }
@@ -121,6 +122,7 @@ LPSTR WINAPI StrRChrIA(LPCSTR lpStart, LPCSTR lpEnd, WORD wMatchIn)
 /* Compares the first nChar bytes of two strings (case sensitive). */
 short WINAPI StrCmpNA(LPCSTR lpStr1, LPCSTR lpStr2, short nChar)
 {
+    NPLOC7
     char  sc1, sc2;
     LPSTR lpsz1, lpsz2;
     short ret;
@@ -159,44 +161,51 @@ short WINAPI StrCmpNIA(LPCSTR lpStr1, LPCSTR lpStr2, short nChar)
 short WINAPI StrCmpNA2(LPSTR lpStr1, LPSTR lpStr2, short nChar)
 {
     char  sc1, sc2;
+    LPSTR lpszEnd1, lpszEnd2;
     short i;
     short ret;
 
+    lpszEnd1 = lpStr1;
+    lpszEnd2 = lpStr2;
     for (i = 0; i < nChar; i++) {
-        if (!*lpStr1 || !*lpStr2)
+        if (!*lpszEnd1 || !*lpszEnd2)
             return lstrcmpA(lpStr1, lpStr2);
-        lpStr1 = CharNextA(lpStr1);
-        lpStr2 = CharNextA(lpStr2);
+        lpszEnd1 = CharNextA(lpszEnd1);
+        lpszEnd2 = CharNextA(lpszEnd2);
     }
-    sc1 = *lpStr1;
-    sc2 = *lpStr2;
-    *lpStr2 = '\0';
-    *lpStr1 = '\0';
+    sc1 = *lpszEnd1;
+    sc2 = *lpszEnd2;
+    *lpszEnd2 = '\0';
+    *lpszEnd1 = '\0';
     ret = lstrcmpA(lpStr1, lpStr2);
-    *lpStr1 = sc1;
-    *lpStr2 = sc2;
+    *lpszEnd1 = sc1;
+    *lpszEnd2 = sc2;
     return ret;
 }
 
 short WINAPI StrCmpNIA2(LPSTR lpStr1, LPSTR lpStr2, short nChar)
 {
+    NPLOC8
     char  sc1, sc2;
+    LPSTR lpszEnd1, lpszEnd2;
     short i;
     short ret;
 
+    lpszEnd1 = lpStr1;
+    lpszEnd2 = lpStr2;
     for (i = 0; i < nChar; i++) {
-        if (!*lpStr1 || !*lpStr2)
+        if (!*lpszEnd1 || !*lpszEnd2)
             return lstrcmpiA(lpStr1, lpStr2);
-        lpStr1 = CharNextA(lpStr1);
-        lpStr2 = CharNextA(lpStr2);
+        lpszEnd1 = CharNextA(lpszEnd1);
+        lpszEnd2 = CharNextA(lpszEnd2);
     }
-    sc1 = *lpStr1;
-    sc2 = *lpStr2;
-    *lpStr2 = '\0';
-    *lpStr1 = '\0';
+    sc1 = *lpszEnd1;
+    sc2 = *lpszEnd2;
+    *lpszEnd2 = '\0';
+    *lpszEnd1 = '\0';
     ret = lstrcmpiA(lpStr1, lpStr2);
-    *lpStr1 = sc1;
-    *lpStr2 = sc2;
+    *lpszEnd1 = sc1;
+    *lpszEnd2 = sc2;
     return ret;
 }
 
@@ -220,16 +229,18 @@ LPSTR WINAPI StrRStrA(LPCSTR lpSource, LPCSTR lpLast, LPCSTR lpSrch)
     if (!lpLast)
         lpLast = lpSource + lstrlenA(lpSource);
 
-    while (lpLast != lpSource) {
+    for (;;) {
+        if (lpLast == lpSource)
+            return NULL;
         lpLast--;
         lpLast = MemRChr((LPSTR)lpLast, lpLast - lpSource + 1, ch);
         if (!lpLast)
-            return NULL;
+            break;
         if (!StrCmpNA(lpLast, lpSrch, iLen) &&
             CharAtLength(lpSource, (short)(lpLast - lpSource)) == lpLast)
-            return (LPSTR)lpLast;
+            break;
     }
-    return NULL;
+    return (LPSTR)lpLast;
 }
 
 LPSTR WINAPI StrStrIA(LPCSTR lpFirst, LPCSTR lpSrch)

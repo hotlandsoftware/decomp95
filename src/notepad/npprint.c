@@ -8,7 +8,7 @@
 #define NPPAD 21
 #include "nppad.h"
 
-#pragma intrinsic(memset)
+#pragma intrinsic(memset, strcpy)
 
 HANDLE hHeader = NULL;
 
@@ -395,7 +395,9 @@ int TranslateString(TCHAR *src)
     int    index = 1;
     int    i, j, k, num;
 
-    nLen[0] = nLen[1] = nLen[2] = 0;
+    nLen[0] = 0;
+    nLen[1] = 0;
+    nLen[2] = 0;
 
     GetLocalTime(&st);
     wsprintf(szDate, TEXT("%2.2d\\%2.2d\\%2.2d"), st.wMonth, st.wDay, st.wYear);
@@ -408,26 +410,28 @@ int TranslateString(TCHAR *src)
         if (*src == TEXT('&')) {
             src++;
             if (*src == letters[0] || *src == letters[1]) {
-                if (fUntitled)
-                    lstrcpy(buf, szUntitled);
-                else
+                if (!fUntitled)
                     GetFileTitle(szFileName, buf, sizeof(buf));
+                else
+                    lstrcpy(buf, szUntitled);
                 pLen = &nLen[index];
-                lstrcpy(chBuff[index] + *pLen, buf);
-                *pLen += lstrlen(buf);
+                k = *pLen;
+                strcpy(chBuff[index] + k, buf);
+                *pLen = lstrlen(buf) + k;
             } else if (*src == letters[2] || *src == letters[3]) {
+                src++;
                 num = 0;
-                if (src[1] == TEXT('+')) {
-                    src += 2;
+                if (*src == TEXT('+')) {
+                    src++;
                     while (*src >= TEXT('0') && *src <= TEXT('9'))
                         num = num * 10 + *src++ - TEXT('0');
-                    src--;
                 }
                 wsprintf(buf, TEXT("%d"), iPageNum + num);
                 pLen = &nLen[index];
                 k = *pLen;
                 lstrcpy(chBuff[index] + k, buf);
                 *pLen = lstrlen(buf) + k;
+                src--;
             } else if (*src == letters[4] || *src == letters[5]) {
                 pLen = &nLen[index];
                 k = *pLen;
@@ -439,7 +443,10 @@ int TranslateString(TCHAR *src)
                 lstrcpy(chBuff[index] + k, szDate);
                 *pLen = k + 12;
             } else if (*src == TEXT('&')) {
-                chBuff[index][nLen[index]++] = TEXT('&');
+                pLen = &nLen[index];
+                k = *pLen;
+                chBuff[index][k] = TEXT('&');
+                *pLen = k + 1;
             } else if (*src == letters[8] || *src == letters[9]) {
                 index = 1;
             } else if (*src == letters[10] || *src == letters[11]) {
@@ -458,9 +465,9 @@ int TranslateString(TCHAR *src)
         pHeaderBuf[i] = TEXT(' ');
     for (i = 0; i < nLen[0]; i++)
         pHeaderBuf[i] = chBuff[0][i];
-    k = xCharsPerLine - nLen[1];
+    k = (xCharsPerLine - nLen[1]) / 2;
     for (j = 0; j < nLen[1]; j++)
-        pHeaderBuf[k / 2 + j] = chBuff[1][j];
+        pHeaderBuf[k + j] = chBuff[1][j];
     k = xCharsPerLine - nLen[2];
     for (j = 0; j < nLen[2]; j++)
         pHeaderBuf[k + j] = chBuff[2][j];
@@ -483,9 +490,7 @@ HDC GetPrinterDC(void)
     }
 
     lpDevNames = (LPDEVNAMES)GlobalLock(g_PageSetupDlg.hDevNames);
-    lpDevMode = NULL;
-    if (g_PageSetupDlg.hDevMode)
-        lpDevMode = (LPDEVMODE)GlobalLock(g_PageSetupDlg.hDevMode);
+    lpDevMode = g_PageSetupDlg.hDevMode ? (LPDEVMODE)GlobalLock(g_PageSetupDlg.hDevMode) : NULL;
 
     hDC = CreateDC((LPTSTR)lpDevNames + lpDevNames->wDriverOffset,
                    (LPTSTR)lpDevNames + lpDevNames->wDeviceOffset,

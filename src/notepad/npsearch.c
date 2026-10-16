@@ -3,7 +3,7 @@
  */
 
 #include "notepad.h"
-#define NPPAD 12
+#define NPPAD 29
 #include "nppad.h"
 
 BOOL fCase = FALSE;         /* match case */

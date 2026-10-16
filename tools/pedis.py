@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Disassemble a range of the original PE with symbol annotation.
-Usage: dis.py <exe> <symbols.txt> <data.txt> <func name | start-end hex>"""
+Usage: pedis.py <exe> <symbols.txt> <data.txt> <func name | start-end hex>"""
 import sys, re, subprocess, bisect
 exe, symf, dataf, what = sys.argv[1:5]
 def load(f):

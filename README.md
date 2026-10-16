@@ -48,8 +48,10 @@ Post-link steps that the original build also performed (timestamps, `BIND`, PE c
 - `tools/coffcmp.py`: compares a COFF `.obj` with the original, function by function (relocations masked)
 - `tools/fdiff.py`: side-by-side instruction diff of one function (object vs. original)
 - `tools/variants.py`: compiles source variants of one function and reports which match;
-  `PADS=0-31` also scans symbol-padding offsets (see `src/notepad/README.md`)
-- `tools/dis.py`: annotated disassembly of the original using a module's `symbols.txt`/`data.txt`
+  `PADS=a-b`/`LOCS=a-b` also try symbol-padding settings (see `src/notepad/README.md`)
+- `tools/padscan.py`: per-function results at every symbol-padding offset
+- `tools/locopt.py`: greedy per-function padding (`NPLOCn`) tuning in file order
+- `tools/pedis.py`: annotated disassembly of the original using a module's `symbols.txt`/`data.txt`
 - `tools/pecodcmp.py`: compares a `.cod` listing with the original PE
 - `tools/pecmp.py`: whole-image PE comparison (headers and per-section counts)
 - `tools/peinfo.py`: PE dump (sections, imports with bound values, relocations)
@@ -67,13 +69,13 @@ Post-link steps that the original build also performed (timestamps, `BIND`, PE c
 |---|---|---|---|---|
 | tapiexe.exe | Windows Telephony DLL hidden app | NE (16-bit) | 100% | 100% |
 | winver.exe | Windows Version program | NE (16-bit) | 100% | 100% |
-| notepad.exe | Notepad | PE (32-bit) | 100% | 53% |
+| notepad.exe | Notepad | PE (32-bit) | 100% | 65% |
 
 *Decompiled*: share of the module's code that has C/assembly source and builds into a runnable binary.
 *Matching*: share of code bytes in functions that compile byte-identically to the original (100% means the
 whole file is byte-identical).
 
-notepad.exe has 38 of its 57 functions matching. It builds to the same size and section layout as the original. `.data`, `.bss` and `.rsrc` are
+notepad.exe has 48 of its 57 functions matching. It builds to the same size and section layout as the original. `.data`, `.bss` and `.rsrc` are
 identical, and import descriptors, hints and bound values are too. The remaining differences are in `.text`
-(19 functions not yet matching), the import order and relocations that follow from it, and the header fields that depend on them.
+(9 functions not yet matching), the import order and relocations that follow from it, and the header fields that depend on them.
 See `src/notepad/README.md` for details.

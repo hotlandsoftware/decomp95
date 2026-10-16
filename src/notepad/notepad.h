@@ -3,6 +3,18 @@
  * Names are ours; only behaviour and layout come from the original binary.
  */
 
+/*
+ * CL 9.00 gives cached API pointers registers in an order that depends on
+ * when each import was first declared.  The original headers evidently
+ * declared these USER32 functions in this order; pre-declaring them first
+ * reproduces that (the later <windows.h> declarations are identical).
+ */
+struct tagMSG;
+__declspec(dllimport) int __stdcall IsDialogMessageA(void *, struct tagMSG *);
+__declspec(dllimport) int __stdcall TranslateAcceleratorA(void *, void *, struct tagMSG *);
+__declspec(dllimport) int __stdcall GetMessageA(struct tagMSG *, void *, unsigned int, unsigned int);
+__declspec(dllimport) int __stdcall TranslateMessage(const struct tagMSG *);
+__declspec(dllimport) long __stdcall DispatchMessageA(const struct tagMSG *);
 #include <windows.h>
 #include <commdlg.h>
 #include <cderr.h>

@@ -4,7 +4,7 @@
  */
 
 #include "notepad.h"
-#define NPPAD 31
+#define NPPAD 0
 #include "nppad.h"
 
 HWND    hwndNP = NULL;
@@ -595,6 +595,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 void SetTitle(TCHAR *sz)
 {
+    NPLOC30
     TCHAR szWindowText[MAX_PATH + 50 + 2];
     TCHAR szFileName2[MAX_PATH];
     HANDLE hFind;
@@ -702,19 +703,21 @@ void GetFileName(TCHAR *szFile, TCHAR *szCmdLine)
 {
     TCHAR *pch = szFile;
     TCHAR chQuote;
+    TCHAR *pchEnd;
     HANDLE hFind;
     WIN32_FIND_DATA info;
 
     chQuote = *szCmdLine;
-    if (chQuote == TEXT('\"') || chQuote == TEXT('\'')) {
+    if (chQuote != TEXT('\"') && chQuote != TEXT('\'')) {
+        lstrcpyn(szFile, szCmdLine, MAX_PATH);
+    } else {
+        pchEnd = szFile + MAX_PATH - 1;
         do {
             if (!*++szCmdLine || *szCmdLine == chQuote)
                 break;
             *pch++ = *szCmdLine;
-        } while (pch != szFile + MAX_PATH - 1);
+        } while (pch != pchEnd);
         *pch = 0;
-    } else {
-        lstrcpyn(szFile, szCmdLine, MAX_PATH);
     }
 
     hFind = FindFirstFile(szFile, &info);
@@ -737,8 +740,8 @@ void FixFilterString(TCHAR *sz)
 
 BOOL NPInitStrings(HINSTANCE hInstance)
 {
-    TCHAR  ***ppsz;
     TCHAR  *pch;
+    TCHAR  ***ppsz;
     HANDLE hStrings;
     int    cchRemaining = 0x1000;
     int    cch;
@@ -748,13 +751,15 @@ BOOL NPInitStrings(HINSTANCE hInstance)
     if (!(pch = (TCHAR *)LocalLock(hStrings)))
         return FALSE;
 
-    for (ppsz = rgsz; *ppsz; ppsz++) {
-        cch = 1 + LoadString(hInstance, (WORD)**ppsz, pch, cchRemaining);
-        **ppsz = pch;
-        pch += cch;
-        if (cch > cchRemaining)
-            MessageBox(NULL, TEXT("Out of RC string space!!"), TEXT("DEV Error!"), MB_OK);
-        cchRemaining -= cch;
+    if (*rgsz) {
+        for (ppsz = rgsz; *ppsz; ppsz++) {
+            cch = 1 + LoadString(hInstance, (WORD)**ppsz, pch, cchRemaining);
+            **ppsz = pch;
+            pch += cch;
+            if (cch > cchRemaining)
+                MessageBox(NULL, TEXT("Out of RC string space!!"), TEXT("DEV Error!"), MB_OK);
+            cchRemaining -= cch;
+        }
     }
 
     /* Header/footer defaults.  (Loads six strings into a two-entry array.) */
