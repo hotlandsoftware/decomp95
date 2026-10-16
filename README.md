@@ -69,6 +69,8 @@ Post-link steps that the original build also performed (timestamps, `BIND`, PE c
 |---|---|---|---|---|
 | tapiexe.exe | Windows Telephony DLL hidden app | NE (16-bit) | 100% | 100% |
 | winver.exe | Windows Version program | NE (16-bit) | 100% | 100% |
+| msmixmgr.dll | Audio Mixer Manager (forwards to MMSYSTEM) | NE (16-bit) | 100% | 100% |
+| rsrc16.dll | Resource Meter 16-bit thunks | NE (16-bit) | 100% | 100% |
 | notepad.exe | Notepad | PE (32-bit) | 100% | 65% |
 
 *Decompiled*: share of the module's code that has C/assembly source and builds into a runnable binary.

@@ -1,0 +1,30 @@
+#include <ver.h>
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     4,0,0,950
+PRODUCTVERSION  4,0,0,950
+FILEFLAGSMASK   0x0030003FL
+FILEFLAGS       0x0L
+FILEOS          VOS_DOS_WINDOWS16
+FILETYPE        VFT_DLL
+FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",      "Microsoft Corporation\0"
+            VALUE "FileDescription",  "Microsoft Audio Mixer Manager\0"
+            VALUE "FileVersion",      "4.0.950\0"
+            VALUE "InternalName",     "msmixmgr.dll\0"
+            VALUE "LegalCopyright",   "Copyright © Microsoft Corp. 1991-1995\0"
+            VALUE "OriginalFilename", "msmixmgr.dll\0"
+            VALUE "ProductName",      "Microsoft Windows\0"
+            VALUE "ProductVersion",   "4.0.950\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
