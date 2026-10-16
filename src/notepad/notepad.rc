@@ -1,0 +1,206 @@
+/*
+ * notepad.rc - Notepad resources (generated from the original with tools/res2rc.py,
+ * then kept as source).  Icons are extracted from the original at build time.
+ */
+
+1 ICON icon1.ico
+
+2 ICON icon2.ico
+
+1 MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New", 9
+        MENUITEM "&Open...", 10
+        MENUITEM "&Save", 1
+        MENUITEM "Save &As...", 2
+        MENUITEM SEPARATOR
+        MENUITEM "Page Se&tup...", 32
+        MENUITEM "&Print", 14
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit", 28
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z", 25
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X", 768, GRAYED
+        MENUITEM "&Copy\tCtrl+C", 769, GRAYED
+        MENUITEM "&Paste\tCtrl+V", 770, GRAYED
+        MENUITEM "De&lete\tDel", 771, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "Select &All", 7
+        MENUITEM "Time/&Date\tF5", 12
+        MENUITEM SEPARATOR
+        MENUITEM "&Word Wrap", 27
+    END
+    POPUP "&Search"
+    BEGIN
+        MENUITEM "&Find...", 3
+        MENUITEM "Find &Next\tF3", 8
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Help Topics", 5
+        MENUITEM SEPARATOR
+        MENUITEM "&About Notepad", 11
+    END
+END
+
+1 ACCELERATORS
+BEGIN
+    45, 769, VIRTKEY, CONTROL
+    112, 5, VIRTKEY
+    114, 8, VIRTKEY
+    116, 12, VIRTKEY
+    8, 25, VIRTKEY, ALT
+    26, 25, ASCII
+    24, 768, ASCII
+    3, 769, ASCII
+    22, 770, ASCII
+END
+
+2 ACCELERATORS
+BEGIN
+    45, 769, VIRTKEY, CONTROL
+    112, 5, VIRTKEY
+    114, 8, VIRTKEY
+    116, 12, VIRTKEY
+    8, 25, VIRTKEY, ALT
+    26, 25, ASCII
+    24, 768, ASCII
+    3, 769, ASCII
+    22, 770, ASCII
+    27, 28, VIRTKEY
+    67, 28, VIRTKEY, CONTROL
+    68, 28, VIRTKEY, CONTROL
+    90, 28, VIRTKEY, CONTROL
+END
+
+12 DIALOG DISCARDABLE 20, 20, 90, 64
+STYLE 0x90c800c0
+CAPTION "Notepad"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL "Cancel", 2, "Button", 0x50030001, 29, 44, 32, 14
+    CONTROL "Now Printing", -1, "Static", 0x50020001, 0, 8, 90, 8
+    CONTROL "", 20, "Static", 0x50020081, 0, 18, 90, 8
+END
+
+14 DIALOG DISCARDABLE 0, 0, 356, 196
+STYLE 0x90c820c4
+CAPTION "Page Setup"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL "Paper", 1073, "Button", 0x50020007, 8, 8, 224, 56
+    CONTROL "Si&ze:", 1089, "Static", 0x50020000, 16, 24, 36, 8
+    CONTROL "", 1137, "ComboBox", 0x50230103, 64, 23, 160, 160
+    CONTROL "&Source:", 1090, "Static", 0x50020000, 16, 45, 36, 8
+    CONTROL "", 1138, "ComboBox", 0x50230103, 64, 42, 160, 160
+    CONTROL "Orientation", 1072, "Button", 0x50020007, 8, 69, 64, 56
+    CONTROL "P&ortrait", 1056, "Button", 0x50030009, 16, 82, 52, 12
+    CONTROL "L&andscape", 1057, "Button", 0x50000009, 16, 103, 52, 12
+    CONTROL "Margins", 1075, "Button", 0x50020007, 80, 69, 152, 56
+    CONTROL "&Left:", 1102, "Static", 0x50020000, 88, 85, 32, 8
+    CONTROL "", 1155, "Edit", 0x50830000, 120, 82, 28, 12
+    CONTROL "&Right:", 1103, "Static", 0x50020000, 164, 85, 32, 8
+    CONTROL "", 1157, "Edit", 0x50830000, 196, 82, 28, 12
+    CONTROL "&Top:", 1104, "Static", 0x50020000, 88, 104, 32, 8
+    CONTROL "", 1156, "Edit", 0x50830000, 120, 103, 28, 12
+    CONTROL "&Bottom:", 1105, "Static", 0x50020000, 164, 104, 32, 8
+    CONTROL "", 1158, "Edit", 0x50830000, 196, 103, 28, 12
+    CONTROL "&Header:", 32, "Static", 0x50020000, 8, 135, 29, 8
+    CONTROL "", 30, "Edit", 0x50810080, 56, 134, 174, 12
+    CONTROL "&Footer:", 33, "Static", 0x50020000, 8, 154, 29, 8
+    CONTROL "", 31, "Edit", 0x50810080, 56, 153, 174, 12
+    CONTROL "OK", 1, "Button", 0x50030001, 190, 174, 50, 14
+    CONTROL "Cancel", 2, "Button", 0x50010000, 244, 174, 50, 14
+    CONTROL "&Printer...", 1026, "Button", 0x50010000, 298, 174, 50, 14
+    CONTROL "Preview", 34, "Button", 0x50000007, 240, 8, 108, 158
+    CONTROL "", 1080, "Static", 0x50000006, 254, 46, 80, 80
+    CONTROL "", 1081, "Static", 0x50000005, 334, 50, 4, 80
+    CONTROL "", 1082, "Static", 0x50000005, 262, 122, 80, 4
+END
+
+1 VERSIONINFO
+FILEVERSION     4,0,0,950
+PRODUCTVERSION  4,0,0,950
+FILEFLAGSMASK   0x3fL
+FILEFLAGS       0x0L
+FILEOS          0x10001L
+FILETYPE        0x1L
+FILESUBTYPE     0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName", "Microsoft Corporation\0"
+            VALUE "FileDescription", "Windows Notepad application file\0"
+            VALUE "FileVersion", "4.00.950\0"
+            VALUE "InternalName", "Notepad\0"
+            VALUE "LegalCopyright", "Copyright © Microsoft Corp. 1991-1995\0"
+            VALUE "OriginalFilename", "NOTEPAD.EXE\0"
+            VALUE "ProductName", "Microsoft® Windows® Operating System\0"
+            VALUE "ProductVersion", "4.00.950\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 0x4e4
+    END
+END
+
+STRINGTABLE
+BEGIN
+    48, "You cannot quit Windows because the Save As dialog\nbox in Notepad is open. Switch to Notepad, close this\ndialog box, and then try quitting Windows again."
+    50, "Cannot load the driver for your printer.\nThere may not be enough memory, or the printer-driver file is missing.  \n\nReinstall your printer, or quit one or more applications to increase available memory, and then try again."
+    51, "%%\nYou do not have permission to open this file.  See the owner of the file or an administrator to obtain permission."
+    52, "This file is too large for Notepad to open.\nWould you like to use WordPad to read this file?"
+    53, "There was a failure in launching WordPad."
+    55, "/p "
+    56, "wordpad.exe"
+    57, "Courier New"
+END
+
+STRINGTABLE
+BEGIN
+    32, "%%"
+    33, "\\*.txt"
+    34, "notepad.hlp"
+    36, "&f"
+    37, "Page &p"
+    42, "fFpPtTdDcCrRlL"
+    43, "Cannot open the %% file.\n\nCannot print the file because it can't be found or is currently being used by another application. Be sure that the path and filename are correct, or wait until the application is finished, and then t \nry again."
+    44, "Text Documents"
+    45, "All Files (*.*)"
+END
+
+STRINGTABLE
+BEGIN
+    1, "Cannot open the %% file.\n\nMake sure a disk is in the drive you specified."
+    3, "Cannot find the %% file.\n\nDo you want to create a new file?"
+    5, "The %% file already exists.\n\nDo you want to overwrite it?"
+    10, "The text in the %% file has changed.\n\nDo you want to save the changes?"
+    11, "Untitled"
+    12, " - Notepad"
+END
+
+STRINGTABLE
+BEGIN
+    16, "Cannot find ""%%"""
+    17, "Not enough memory available to complete this operation. Quit one or more applications to increase available memory, and then try again."
+    18, "The %% file is too large for Notepad.\n\nUse another editor to edit the file."
+    19, "Notepad"
+    20, "The Clipboard line is too long to paste.\n\nCopy and paste smaller portions of the line."
+    21, "Not enough disk space to save the %% file.\n\nDelete one or more files to increase available disk space, or save the file to a different disk."
+    22, "The %% file is not in the correct format for use with Notepad.\n\nCreate a new file or try opening a different file."
+    25, "Cannot print the %% file. Be sure that your printer is connected properly and use Control Panel to verify that the printer is configured properly."
+    26, "Not a valid file name."
+    27, "The filename %% is not valid.\nerify that the filename is no longer than 8 characters, followed by a period and an extension."
+    28, "Not enough disk space to print the %% file.\nDelete one or more files to increase available disk space, and then try again."
+    29, "Not enough memory to print.\n\nQuit one or more applications to increase available memory, and then try again."
+    30, "Cannot create the %% file.\n\nMake sure that the path and filename are correct."
+    31, "Cannot carry out the Word Wrap command because there is too much text in the file."
+END

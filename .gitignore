@@ -3,3 +3,7 @@ build/
 msvc/
 rc4/
 share/
+msvc20/
+win32sdk/
+msvc21/
+msvc22/
